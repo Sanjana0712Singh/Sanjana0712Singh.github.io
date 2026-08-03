@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjana Singh — Portfolio</title>
+<meta name="description" content="Sanjana Singh — software engineer and former marketing lead. Projects, photography, and marketing work.">
+<meta property="og:title" content="Sanjana Singh — Portfolio">
+<meta property="og:description" content="Software engineer and former marketing lead — projects, photography, and marketing work.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF6F3;
+    --paper:#FFFFFF;
+    --ink:#12241B;
+    --ink-soft:#4B6357;
+    --pink:#FF4F93;
+    --pink-deep:#D6266C;
+    --pink-pale:#FFE1EC;
+    --pink-light:#FF9EC6;
+    --green:#1F8A54;
+    --green-deep:#0B3D24;
+    --green-pale:#DFF6E7;
+    --mono:'IBM Plex Mono', monospace;
+    --display:'Space Grotesk', sans-serif;
+    --body:'Inter', sans-serif;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  body.locked{overflow:hidden;height:100vh;}
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;cursor:pointer;}
+  :focus-visible{outline:3px solid var(--green);outline-offset:2px;}
+
+  /* ---------- intro ribbon reveal ---------- */
+  #introOverlay{
+    position:fixed;inset:0;z-index:999;
+    background:linear-gradient(160deg,var(--bg),var(--pink-pale) 120%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    transition:opacity .6s ease, visibility .6s ease;
+  }
+  #introOverlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+  .ribbon-wrap{
+    display:flex;flex-direction:column;align-items:center;gap:16px;
+    cursor:pointer;border:none;background:none;padding:0;
+  }
+  .ribbon-svg{width:110px;height:96px;overflow:visible;}
+  .ribbon-part{transition:transform .55s cubic-bezier(.4,0,.2,1), opacity .5s ease;transform-origin:55px 46px;}
+  .ribbon-wrap.untie .loop-left{transform:translate(-64px,-46px) rotate(-55deg) scale(.7);opacity:0;}
+  .ribbon-wrap.untie .loop-right{transform:translate(64px,-46px) rotate(55deg) scale(.7);opacity:0;}
+  .ribbon-wrap.untie .tail-left{transform:translate(-30px,70px) rotate(-25deg);opacity:0;}
+  .ribbon-wrap.untie .tail-right{transform:translate(30px,70px) rotate(25deg);opacity:0;}
+  .ribbon-wrap.untie .knot{transform:scale(0);opacity:0;}
+  .intro-label{font-family:var(--mono);font-size:13px;color:var(--ink-soft);letter-spacing:.04em;transition:opacity .4s ease;}
+  .ribbon-wrap.untie + .intro-label{opacity:0;}
+  .ribbon-wrap:hover .ribbon-part{filter:drop-shadow(0 4px 10px rgba(214,38,108,.25));}
+  @media (prefers-reduced-motion: reduce){
+    .ribbon-part{transition:opacity .3s ease;}
+  }
+
+  /* ---------- background texture ---------- */
+  .bg-grid{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(31,138,84,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(31,138,84,0.05) 1px, transparent 1px);
+    background-size:42px 42px;
+  }
+  .blob{
+    position:fixed;border-radius:50%;filter:blur(60px);opacity:.35;z-index:0;pointer-events:none;
+  }
+  .blob-pink{width:420px;height:420px;background:var(--pink-pale);top:-120px;right:-120px;}
+  .blob-green{width:380px;height:380px;background:var(--green-pale);bottom:-140px;left:-140px;}
+
+  /* ---------- butterfly: anchored inside the page, scrolls with content, same spot on every tab ---------- */
+  .site-stage{position:relative;}
+  .butterfly-layer{position:absolute;inset:0;pointer-events:none;z-index:6;}
+  .butterfly{
+    position:absolute;
+    width:42px;height:42px;
+    top:3%; left:80%;
+    pointer-events:none;
+    transition:top 2.6s cubic-bezier(.65,0,.35,1), left 2.6s cubic-bezier(.65,0,.35,1);
+  }
+  .butterfly svg{width:100%;height:100%;overflow:visible;}
+  .wing{transform-origin:2px 12px; transition:transform .18s ease;}
+  .wing-right{transform-origin:34px 12px;}
+  .butterfly.flap .wing-left{animation:flapL .32s ease-in-out infinite;}
+  .butterfly.flap .wing-right{animation:flapR .32s ease-in-out infinite;}
+  @keyframes flapL{0%,100%{transform:rotateY(0deg) scaleX(1);}50%{transform:rotateY(0deg) scaleX(.35);}}
+  @keyframes flapR{0%,100%{transform:scaleX(1);}50%{transform:scaleX(.35);}}
+  @media (prefers-reduced-motion: reduce){
+    .butterfly{transition:none;}
+    .butterfly.flap .wing-left,.butterfly.flap .wing-right{animation:none;}
+  }
+
+  /* ---------- nav ---------- */
+  header{
+    position:sticky;top:0;z-index:20;
+    background:rgba(251,246,243,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(18,36,27,0.08);
+  }
+  .nav-inner{
+    max-width:1080px;margin:0 auto;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 24px;
+    gap:16px;
+  }
+  .logo{
+    font-family:var(--mono);font-size:15px;font-weight:500;
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--pink);animation:blink 1.4s steps(1) infinite;}
+  @keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+  .tabs{display:flex;gap:4px;background:var(--paper);border:1px solid rgba(18,36,27,0.1);border-radius:999px;padding:4px;}
+  .tab{
+    border:none;background:transparent;padding:9px 18px;border-radius:999px;
+    font-family:var(--mono);font-size:13px;color:var(--ink-soft);
+    transition:.25s;
+  }
+  .tab.active{background:var(--ink);color:var(--bg);}
+  .tab:not(.active):hover{color:var(--pink-deep);}
+
+  /* ---------- layout ---------- */
+  main{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:56px 24px 120px;}
+  .page{display:none;animation:fadeUp .5s ease;}
+  .page.active{display:block;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+
+  .eyebrow{
+    font-family:var(--mono);font-size:13px;color:var(--green-deep);
+    background:var(--green-pale);display:inline-block;padding:4px 10px;border-radius:6px;
+    margin-bottom:14px;letter-spacing:.02em;
+  }
+  h1{font-family:var(--display);font-size:clamp(34px,5vw,54px);line-height:1.05;margin:0 0 14px;}
+  h1 .accent{color:var(--pink);}
+  .lede{font-size:18px;color:var(--ink-soft);max-width:560px;margin:0 0 40px;}
+
+  .hero-grid{display:grid;grid-template-columns:1fr 230px;gap:32px;align-items:start;}
+  @media (max-width:800px){ .hero-grid{grid-template-columns:1fr;} }
+  .hero-photo{
+    width:100%;aspect-ratio:3/4;border-radius:18px;overflow:hidden;
+    border:3px solid var(--pink);position:relative;
+    background:linear-gradient(150deg,var(--pink-pale),var(--green-pale));
+    box-shadow:0 16px 32px rgba(18,36,27,.12);
+  }
+  .hero-photo img{width:100%;height:100%;object-fit:cover;}
+  .hero-photo .photo-fallback{
+    position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  }
+  .hero-photo .photo-fallback svg{width:34px;height:34px;color:var(--green-deep);}
+  .hero-photo .photo-fallback span{font-family:var(--mono);font-size:11px;color:var(--ink-soft);text-align:center;padding:0 10px;}
+
+  /* section title w/ wave+bubble hover */
+  .section-title{
+    position:relative;display:inline-block;
+    font-family:var(--display);font-size:26px;font-weight:600;margin:56px 0 22px;
+    cursor:default;
+  }
+  .section-title .wave{position:absolute;left:0;bottom:-8px;width:100%;height:10px;}
+  .section-title .wave path{
+    fill:none;stroke:var(--pink);stroke-width:3;stroke-linecap:round;
+    stroke-dasharray:220;stroke-dashoffset:220;transition:stroke-dashoffset .6s ease;
+  }
+  .section-title:hover .wave path{stroke-dashoffset:0;}
+  .bubble-zone{position:relative;}
+  .bubble{
+    position:absolute;border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(255,79,147,.15) 60%, rgba(31,138,84,.25));
+    border:1px solid rgba(31,138,84,.3);
+    animation:rise 1.1s ease-out forwards;
+  }
+  @keyframes rise{
+    0%{transform:translateY(0) scale(.4);opacity:.9;}
+    100%{transform:translateY(-46px) scale(1.05);opacity:0;}
+  }
+
+  /* ---------- home ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  @media (max-width:760px){.split{grid-template-columns:1fr;}}
+  .id-card{
+    background:var(--paper);border-radius:var(--radius);padding:24px;
+    border:1px solid rgba(18,36,27,.08);
+  }
+  .id-card.code{border-top:4px solid var(--green);}
+  .id-card.brand{border-top:4px solid var(--pink);}
+  .id-card h3{font-family:var(--mono);font-size:14px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 10px;color:var(--ink-soft);}
+  .id-card p{margin:0;color:var(--ink-soft);font-size:15px;}
+
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:16px;}
+  .tile{
+    position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;
+    background:linear-gradient(135deg,var(--pink-pale),var(--green-pale));
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    border:1px dashed rgba(18,36,27,.25);cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .tile:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(18,36,27,.12);}
+  .tile span{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:0 8px;}
+  .tile svg{width:26px;height:26px;margin-bottom:6px;color:var(--green-deep);}
+  .tile.video-tile::after{
+    content:"▶";position:absolute;bottom:8px;right:10px;font-size:12px;color:var(--pink-deep);
+  }
+
+  /* ---------- lens carousel ---------- */
+  .carousel{position:relative;display:flex;align-items:center;gap:10px;margin-top:16px;}
+  .car-arrow{
+    flex:0 0 auto;width:36px;height:36px;border-radius:50%;border:none;
+    background:var(--paper);box-shadow:0 4px 12px rgba(18,36,27,.15);
+    font-size:18px;color:var(--pink-deep);display:flex;align-items:center;justify-content:center;
+    transition:.2s;
+  }
+  .car-arrow:hover{background:var(--pink);color:#fff;transform:scale(1.06);}
+  .car-track{
+    display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+    padding:6px 2px;flex:1;scrollbar-width:none;-ms-overflow-style:none;
+  }
+  .car-track::-webkit-scrollbar{display:none;}
+ .car-track .tile{flex:0 0 calc((100% - 56px)/3);scroll-snap-align:start;aspect-ratio:3/2;}
+  @media (max-width:760px){ .car-track .tile{flex:0 0 70%;} }
+  @media (max-width:480px){ .car-track .tile{flex:0 0 85%;} }
+
+  /* ---------- projects ---------- */
+  .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+  .project-card{
+    background:var(--paper);border-radius:var(--radius);overflow:hidden;
+    border:1px solid rgba(18,36,27,.08);cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .project-card:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(18,36,27,.12);}
+  .video-wrap{position:relative;aspect-ratio:16/10;background:var(--green-deep);}
+  .video-wrap video{width:100%;height:100%;object-fit:cover;display:block;}
+  .video-placeholder{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--green-deep),#154a2c);color:#DFF6E7;gap:6px;text-align:center;padding:10px;
+  }
+  .video-placeholder svg{width:28px;height:28px;}
+  .video-placeholder small{font-family:var(--mono);font-size:10.5px;opacity:.75;}
+  .project-body{padding:16px 18px;}
+  .project-body h4{font-family:var(--display);font-size:18px;margin:0 0 6px;}
+  .project-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+  .tag{font-family:var(--mono);font-size:11px;background:var(--pink-pale);color:var(--pink-deep);padding:3px 8px;border-radius:5px;}
+  .project-body p.summary{color:var(--ink-soft);font-size:14px;margin:0;}
+
+  /* modal */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(18,36,27,.55);backdrop-filter:blur(3px);
+    display:none;align-items:center;justify-content:center;z-index:50;padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--paper);border-radius:18px;max-width:640px;width:100%;
+    overflow:hidden;animation:pop .3s ease;max-height:90vh;overflow-y:auto;
+  }
+  @keyframes pop{from{transform:scale(.92);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .modal .video-wrap{aspect-ratio:16/9;}
+  .modal-body{padding:22px 26px 26px;}
+  .modal-body h3{font-family:var(--display);font-size:24px;margin:0 0 10px;}
+  .modal-body p{color:var(--ink-soft);font-size:15px;}
+  .modal-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono);font-size:13px;border:none;border-radius:999px;padding:11px 20px;
+    display:inline-flex;align-items:center;gap:8px;transition:.2s;font-weight:500;
+  }
+  .btn-github{background:var(--ink);color:var(--bg);}
+  .btn-github:hover{background:var(--green-deep);}
+  .btn-close{background:var(--pink-pale);color:var(--pink-deep);}
+  .btn-close:hover{background:var(--pink);color:#fff;}
+
+  /* ---------- marketing card stack + ascii butterfly ---------- */
+  .mkt-row{display:flex;gap:52px;align-items:flex-start;flex-wrap:wrap;margin-top:10px;}
+  .stack-wrap{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;}
+  .stack{position:relative;width:260px;height:330px;flex-shrink:0;margin:0 24px 20px 0;}
+  .stack-card{
+    position:absolute;inset:0;border-radius:16px;overflow:hidden;
+    border:1px solid rgba(18,36,27,.1);
+    box-shadow:0 12px 26px rgba(18,36,27,.15);
+    display:flex;flex-direction:column;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s ease;
+    cursor:pointer;
+  }
+  .stack-card .thumb{flex:1;background:linear-gradient(135deg,var(--pink-pale),var(--green-pale));display:flex;align-items:center;justify-content:center;}
+  .stack-card .thumb span{font-family:var(--mono);font-size:11px;color:var(--ink-soft);padding:0 14px;text-align:center;}
+  .stack-card .cap{padding:12px 14px;background:var(--paper);}
+  .stack-card .cap b{font-family:var(--display);font-size:15px;}
+  .stack-card .cap div{font-family:var(--mono);font-size:11px;color:var(--pink-deep);margin-top:2px;}
+  .stack-info{max-width:280px;}
+  .stack-info p{color:var(--ink-soft);font-size:14px;}
+  .stack-hint{font-family:var(--mono);font-size:12px;color:var(--green-deep);}
+
+  .butterfly-art-wrap{flex:1 1 260px;min-width:220px;display:flex;justify-content:center;align-items:flex-start;padding-top:6px;}
+  .butterfly-art{
+    font-family:var(--mono);font-size:clamp(12px,1.6vw,18px);line-height:1.05;letter-spacing:.02em;
+    color:var(--pink);white-space:pre;user-select:none;font-weight:700;
+  }
+  .butterfly-dot{display:inline-block;color:var(--pink);transition:color .2s ease, transform .2s ease;}
+  .butterfly-dot:hover, .butterfly-dot.hovered{color:#33c286;transform:scale(1.15);}
+  .butterfly-dot.empty{visibility:hidden;}
+  @media (max-width:760px){ .butterfly-art-wrap{display:none;} }
+
+  /* ---------- contact ---------- */
+  .contact-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:36px;}
+  @media (max-width:820px){.contact-grid{grid-template-columns:1fr;}}
+  .email-card{background:var(--paper);border-radius:var(--radius);padding:26px;border:1px solid rgba(18,36,27,.08);}
+  .email-btn{
+    margin-top:16px;background:var(--pink);color:#fff;padding:14px 22px;border-radius:999px;
+    font-family:var(--mono);font-size:14px;display:inline-flex;align-items:center;gap:10px;
+    transition:.2s;text-decoration:none;
+  }
+  .email-btn:hover{background:var(--pink-deep);transform:translateY(-2px);}
+  .email-addr{font-family:var(--mono);font-size:14px;color:var(--ink-soft);margin-top:12px;}
+
+  .board-card{background:var(--paper);border-radius:var(--radius);padding:22px;border:1px solid rgba(18,36,27,.08);}
+  .draw-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;}
+  #drawPad{
+    border-radius:10px;border:2px solid var(--ink);background:#fff;touch-action:none;cursor:crosshair;
+  }
+  .swatches{display:flex;flex-direction:column;gap:8px;}
+  .swatch{
+    width:26px;height:26px;border-radius:50%;border:2px solid rgba(18,36,27,.15);cursor:pointer;
+  }
+  .swatch.active{outline:2px solid var(--ink);outline-offset:2px;}
+  .draw-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .btn-mini{background:var(--green-pale);color:var(--green-deep);font-size:12px;padding:8px 14px;border-radius:8px;border:none;}
+  .btn-mini:hover{background:var(--green);color:#fff;}
+  .btn-stick{background:var(--pink);color:#fff;}
+  .btn-stick:hover{background:var(--pink-deep);}
+
+  .photo-frame{
+    margin-top:20px;padding:14px;border-radius:14px;
+    background:linear-gradient(135deg,#C9955F,#8C5A34 45%,#C9955F);
+    box-shadow:0 10px 24px rgba(18,36,27,.18), inset 0 0 0 3px rgba(255,255,255,.15);
+  }
+  .corkboard{
+    position:relative;min-height:260px;border-radius:6px;
+    background:
+      repeating-linear-gradient(90deg, rgba(140,90,52,.05) 0 2px, transparent 2px 30px),
+      #F7EFDD;
+    border:1px solid rgba(18,36,27,.08);overflow:hidden;
+    box-shadow:inset 0 2px 8px rgba(0,0,0,.08);
+  }
+  .corkboard .empty-msg{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    font-family:var(--mono);font-size:12px;color:#8a6a45;text-align:center;padding:20px;
+  }
+  .sticker{
+    position:absolute;width:76px;height:76px;background:#fff;border-radius:8px;
+    box-shadow:0 6px 14px rgba(0,0,0,.2);padding:4px;
+  }
+  .sticker img{width:100%;height:100%;object-fit:contain;}
+  .sticker .rm{
+    position:absolute;top:-8px;right:-8px;width:20px;height:20px;border-radius:50%;
+    background:var(--pink);color:#fff;border:none;font-size:12px;line-height:1;
+    display:none;align-items:center;justify-content:center;
+  }
+  .sticker:hover .rm{display:flex;}
+  .storage-note{font-family:var(--mono);font-size:11px;color:var(--ink-soft);margin-top:10px;}
+
+  footer{text-align:center;padding:30px;font-family:var(--mono);font-size:12px;color:var(--ink-soft);position:relative;z-index:1;}
+
+  /* ---------- resume preview ---------- */
+  .resume-wrap {
+    margin-top: 32px;
+    border-top: 1px dashed rgba(18,36,27,.15);
+    padding-top: 24px;
+  }
+  .resume-wrap h3 {
+    font-family: var(--mono);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  .resume-frame {
+    width: 100%;
+    aspect-ratio: 8.5 / 11; /* standard letter paper ratio */
+    border-radius: 8px;
+    border: 1px solid rgba(18,36,27,.1);
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: 0 4px 12px rgba(18,36,27,.05);
+    margin-bottom: 16px;
+  }
+  .resume-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+  .download-btn {
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid rgba(18,36,27,.15);
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: .2s;
+    font-weight: 500;
+  }
+  .download-btn:hover {
+    background: var(--green-pale);
+    color: var(--green-deep);
+    border-color: var(--green);
+  }
+
+  /* ---------- social links ---------- */
+  .links-wrap {
+    margin-top: 32px;
+    border-top: 1px dashed rgba(18,36,27,.15);
+    padding-top: 24px;
+  }
+  .links-wrap h3 {
+    font-family: var(--mono);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg);
+    border: 1px solid rgba(18,36,27,.1);
+    border-radius: 10px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: .2s ease;
+  }
+  .social-link:hover {
+    border-color: var(--pink);
+    background: var(--pink-pale);
+    color: var(--pink-deep);
+    transform: translateX(4px); /* Slight nudge to the right on hover */
+  }
+  .social-link span {
+    opacity: 0.5;
+    font-size: 14px;
+  }
+
+  /* ---------- Lily Pad Skills ---------- */
+  .lily-pond {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 20px;
+  }
+  .lily-pad {
+    width: 46px;
+    height: 46px;
+    background: var(--green); /* Your deep green */
+    /* Organic blob shape to mimic a lily pad */
+    border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(18,36,27,.1);
+    cursor: default;
+    position: relative;
+  }
+  .lily-pad img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    filter: brightness(0) invert(1); /* Makes the icons stark white */
+    transition: transform 0.3s ease;
+  }
+  
+  /* Hover state: Turns blue and morphs into a perfect circle */
+  .lily-pad:hover {
+    background: #0EA5E9; /* Vibrant water blue */
+    border-radius: 50%;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(14, 165, 233, 0.25);
+  }
+  .lily-pad:hover img {
+    transform: scale(1.15) rotate(-5deg); /* Slight pop and tilt on the logo */
+  }
+  
+  /* Tooltip text for accessibility/clarity */
+  .lily-pad::after {
+    content: attr(data-skill);
+    position: absolute;
+    bottom: -24px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-soft);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .lily-pad:hover::after {
+    opacity: 1;
+  }
+
+  /* customize callouts */
+  .todo{
+    font-family:var(--mono);font-size:10.5px;color:var(--pink-deep);
+    background:var(--pink-pale);display:inline-block;padding:2px 6px;border-radius:4px;margin-top:6px;
+  }
+</style>
+</head>
+<body class="locked">
+
+<!-- ============ intro ribbon reveal ============ -->
+<div id="introOverlay">
+  <button class="ribbon-wrap" id="ribbonWrap" aria-label="Click the ribbon to open the site">
+    <svg class="ribbon-svg" viewBox="0 0 110 96">
+      <path class="ribbon-part tail tail-left" d="M52 46 C42 62, 34 74, 26 92 L38 92 C46 76, 52 66, 60 50 Z" fill="var(--pink-deep)"/>
+      <path class="ribbon-part tail tail-right" d="M58 46 C68 62, 76 74, 84 92 L72 92 C64 76, 58 66, 50 50 Z" fill="var(--green)"/>
+      <path class="ribbon-part loop loop-left" d="M52 44 C40 30, 18 28, 10 40 C4 50, 14 60, 30 56 C42 53, 50 48, 52 44 Z" fill="var(--pink)"/>
+      <path class="ribbon-part loop loop-right" d="M58 44 C70 30, 92 28, 100 40 C106 50, 96 60, 80 56 C68 53, 60 48, 58 44 Z" fill="var(--pink)"/>
+      <circle class="ribbon-part knot" cx="55" cy="46" r="9" fill="var(--pink-deep)"/>
+    </svg>
+    <span class="intro-label">click the ribbon to open ✂</span>
+  </button>
+</div>
+
+<div class="bg-grid"></div>
+<div class="blob blob-pink"></div>
+<div class="blob blob-green"></div>
+
+<header>
+  <div class="nav-inner">
+    <div class="logo"><span class="dot"></span> portfolio<span style="color:var(--pink-deep)">.</span>dev</div>
+    <nav class="tabs">
+      <button class="tab active" data-page="home">// home</button>
+      <button class="tab" data-page="projects">$ projects</button>
+      <button class="tab" data-page="contact">→ contact/resume</button>
+    </nav>
+  </div>
+</header>
+
+<div class="site-stage">
+  <div class="butterfly-layer">
+    <div class="butterfly" id="butterfly">
+      <svg viewBox="0 0 46 24">
+        <ellipse cx="23" cy="12" rx="2.4" ry="9" fill="#12241B"/>
+        <path class="wing wing-left" d="M21 12 C10 -4, -6 2, 4 14 C10 22, 18 18, 21 12 Z" fill="#FF4F93" opacity="0.9"/>
+        <path class="wing wing-right" d="M25 12 C36 -4, 52 2, 42 14 C36 22, 28 18, 25 12 Z" fill="#1F8A54" opacity="0.9"/>
+      </svg>
+    </div>
+  </div>
+
+<main>
+
+  <!-- ================= HOME ================= -->
+  <section class="page active" id="home">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">// about-me</span>
+        <h1>Hi, I'm <span class="accent">Sanjana Singh!</span><br>Driven by curiosity, and fond of building solutions.</h1>
+        <p class="lede" style="margin-bottom:0;">
+          Passionate about using code, statistical analysis, and applied AI to drive measurable product growth. 
+          Seeking to leverage my background in Python, data visualization, and campaign analytics to help cross-functional teams make data-backed decisions.
+          <span class="todo">Let's get it!</span>
+        </p>
+      </div>
+      <div class="hero-photo">
+        <img src="images/grad.JPG" alt="Sanjana Singh" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="photo-fallback">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+          <span>your photo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="split" style="margin-top:40px;">
+      
+      <!-- Code Card -->
+      <div class="id-card code">
+        <h3>&lt;/&gt; the code side</h3>
+        <p>I graduated with a bachelor’s degree in Computer Science from the University of South Florida. Over the years, I’ve worked on a variety of projects using Python, SQL, C, and HTML. My experience with terminals, IDEs, and virtual machines has given me a strong foundation in software development. I’m eager to see how I can continue to grow and contribute in my career.</p>
+        
+        <div class="lily-pond">
+          <!-- Python -->
+          <div class="lily-pad" data-skill="Python">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+          </div>
+          <!-- SQL -->
+          <div class="lily-pad" data-skill="SQL">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/azuresqldatabase/azuresqldatabase-original.svg" alt="SQL">
+          </div>
+          <!-- C -->
+          <div class="lily-pad" data-skill="C">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C">
+          </div>
+          <!-- HTML -->
+          <div class="lily-pad" data-skill="HTML">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">
+          </div>
+        </div>
+      </div>
+
+      <!-- Brand Card -->
+      <div class="id-card brand">
+        <h3>the story side</h3>
+        <p>Storytelling is most powerful when backed by data. Whether I'm editing video, designing graphics, or driving cross-team collaboration, I focus on capturing attention and translating creative campaigns into measurable, tangible results.</p>
+        
+        <div class="lily-pond">
+          <!-- Canva -->
+          <div class="lily-pad" data-skill="Canva">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/canva/canva-original.svg" alt="Canva">
+          </div>
+          <!-- Photoshop -->
+          <div class="lily-pad" data-skill="Photoshop">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" alt="Photoshop">
+          </div>
+          <!-- CapCut (Using a generic video icon since CapCut isn't in devicon) -->
+          <div class="lily-pad" data-skill="CapCut">
+             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bubble-zone" id="gallery-header-1">
+      <h2 class="section-title">Behind the lens
+        <svg class="wave" viewBox="0 0 200 10"><path d="M2 6 Q 25 -2, 50 6 T 100 6 T 150 6 T 198 6"/></svg>
+      </h2>
+    </div>
+    <p class="lede" style="margin-bottom:16px;">Photography's my off-screen hobby. Swipe or use the arrows to look through.</p>
+    <div class="carousel">
+      <button class="car-arrow" id="lensPrev" aria-label="Previous photos">‹</button>
+      <div class="car-track" id="lensTrack"></div>
+      <button class="car-arrow" id="lensNext" aria-label="Next photos">›</button>
+    </div>
+
+    <div class="bubble-zone" id="gallery-header-2">
+      <h2 class="section-title">Behind the scenes
+        <svg class="wave" viewBox="0 0 200 10"><path d="M2 6 Q 25 -2, 50 6 T 100 6 T 150 6 T 198 6"/></svg>
+      </h2>
+    </div>
+    <p class="lede" style="margin-bottom:16px;">Stills and clips from my time leading marketing — campaigns, shoots, launches.</p>
+    <div class="gallery" id="marketingMediaGallery"></div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section class="page" id="projects">
+    <span class="eyebrow">$ cd ~/projects</span>
+    <h1>Things I've <span class="accent">built</span>!</h1>
+    <p class="lede" style="margin-bottom: 0;">Hover a build to watch a silent preview. Click to open it up.</p>
+
+    <div class="bubble-zone" id="dev-header">
+      <h2 class="section-title" style="margin-top: 24px;">Dev projects
+        <svg class="wave" viewBox="0 0 200 10"><path d="M2 6 Q 25 -2, 50 6 T 100 6 T 150 6 T 198 6"/></svg>
+      </h2>
+    </div>
+    <div class="project-grid" id="devProjects"></div>
+
+    <div class="bubble-zone" id="mkt-header">
+      <h2 class="section-title">Marketing &amp; design work
+        <svg class="wave" viewBox="0 0 200 10"><path d="M2 6 Q 25 -2, 50 6 T 100 6 T 150 6 T 198 6"/></svg>
+      </h2>
+    </div>
+    <div class="mkt-row">
+      <div class="stack-wrap">
+        <div class="stack" id="cardStack"></div>
+        <div class="stack-info">
+          <p class="stack-hint">click on the cards!</p>
+          <p>Campaigns, decks, and visual work from the Google Developer Group and Girls Who Code @ USF. Click through the stack like a deck of cards — it loops.</p>
+        </div>
+      </div>
+      <div class="butterfly-art-wrap">
+        <div class="butterfly-art" id="butterflyArt" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="page" id="contact">
+    <span class="eyebrow">→ say hello</span>
+    <h1>Let's <span class="accent">talk!</span></h1>
+    <p class="lede">Hiring, collaborating, or just want to chat about the code/marketing crossover...I'm around💕</p>
+
+    <div class="contact-grid">
+      <div class="email-card">
+        <h3 style="font-family:var(--mono);font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:0 0 4px;">Reach out</h3>
+        <p style="color:var(--ink-soft);font-size:14px;margin:0;">Fastest way to reach me — opens your email app with a note started.</p>
+        <a class="email-btn" id="emailBtn" href="mailto:sanjanasingh@usf.edu?subject=Let%27s%20connect&body=Hi%20Sanjana%2C%0A%0A">
+          ✉ email me
+        </a>
+        <div class="email-addr">sanjanasingh@usf.edu <span class="todo"><3</span></div>
+        <!-- New Resume Section -->
+        <div class="resume-wrap">
+          <h3>Resume</h3>
+          <div class="resume-frame">
+            <!-- The #toolbar=0 hides the PDF viewer's top bar for a cleaner look -->
+            <iframe src="resume.pdf#toolbar=0&navpanes=0&scrollbar=0" title="Resume Preview"></iframe>
+          </div>
+          <a class="download-btn" href="resume.pdf" download="Sanjana_Singh_Resume.pdf">
+            ↓ download pdf
+          </a>
+        </div>
+      </div>
+
+      <div class="board-card">
+        <h3 style="font-family:var(--mono);font-size:14px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:0 0 12px;">Leave a sticker</h3>
+        <div class="draw-row">
+          <canvas id="drawPad" width="150" height="150"></canvas>
+          <div class="swatches" id="swatches"></div>
+        </div>
+        <div class="draw-actions">
+          <button class="btn-mini" id="clearPad">clear</button>
+          <button class="btn-mini btn-stick" id="stickBtn">stick it →</button>
+        </div>
+        <div class="photo-frame">
+          <div class="corkboard" id="corkboard">
+            <div class="empty-msg">the board's empty — draw something small above and pin it here</div>
+          </div>
+        </div>
+        <div class="storage-note">Hover a sticker and click the (X) to remove it.</div>
+        <!-- New Links Section -->
+        <div class="links-wrap">
+          <h3>Elsewhere</h3>
+          <div class="social-links">
+            <a href="https://www.linkedin.com/in/sanjana-singh-ss134340/" target="_blank" rel="noopener" class="social-link">
+              LinkedIn <span>↗</span>
+            </a>
+            <a href="https://github.com/Sanjana0712Singh" target="_blank" rel="noopener" class="social-link">
+              GitHub <span>↗</span>
+            </a>
+            <a href="https://open.spotify.com/user/22wasabiss?si=8f6d875f8b68462b" target="_blank" rel="noopener" class="social-link">
+              Spotify: Coding & Concert Prep <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</div><!-- /.site-stage -->
+
+<footer>Bello(Minionese) 💛, thanks for stopping by! — Sanjana Singh © <span id="year"></span></footer>
+
+<!-- ============ project modal ============ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="video-wrap">
+      <video id="modalVideo" muted loop playsinline></video>
+      <div class="video-placeholder" id="modalPlaceholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 5v14l11-7z"/></svg>
+        <small>add your demo video src</small>
+      </div>
+    </div>
+    <div class="modal-body">
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <div class="modal-actions">
+        <a class="btn btn-github" id="modalGithub" target="_blank" rel="noopener">↗ view on GitHub</a>
+        <button class="btn btn-close" id="modalClose">close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ intro ribbon reveal ============ */
+const introOverlay = document.getElementById('introOverlay');
+const ribbonWrap = document.getElementById('ribbonWrap');
+function openSite(){
+  if(ribbonWrap.classList.contains('untie')) return;
+  ribbonWrap.classList.add('untie');
+  setTimeout(()=>{
+    introOverlay.classList.add('hidden');
+    document.body.classList.remove('locked');
+  }, 550);
+}
+ribbonWrap.addEventListener('click', openSite);
+
+/* ============ nav ============ */
+const tabs = document.querySelectorAll('.tab');
+const pages = document.querySelectorAll('.page');
+tabs.forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    pages.forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.page).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ============ butterfly: idles in one zone near the top, occasionally drifts within it ============ */
+const butterfly = document.getElementById('butterfly');
+function flutter(){
+  butterfly.classList.add('flap');
+  setTimeout(()=>butterfly.classList.remove('flap'), 900 + Math.random()*600);
+}
+function driftWithinZone(){
+  const top = 2 + Math.random()*10;   // stays near the top of whichever page is showing
+  const left = 74 + Math.random()*18; // stays toward the right side
+  butterfly.style.top = top + '%';
+  butterfly.style.left = left + '%';
+  flutter();
+}
+setInterval(flutter, 3500 + Math.random()*3000);
+setInterval(driftWithinZone, 14000 + Math.random()*8000);
+flutter();
+
+/* ============ bubble + wave hover ============ */
+document.querySelectorAll('.bubble-zone').forEach(zone=>{
+  let last = 0;
+  zone.addEventListener('mousemove', (e)=>{
+    const now = Date.now();
+    if(now - last < 90) return;
+    last = now;
+    const rect = zone.getBoundingClientRect();
+    const b = document.createElement('div');
+    const size = 6 + Math.random()*10;
+    b.className = 'bubble';
+    b.style.width = size+'px';
+    b.style.height = size+'px';
+    b.style.left = (e.clientX - rect.left) + 'px';
+    b.style.top = (e.clientY - rect.top) + 'px';
+    zone.style.position = zone.style.position || 'relative';
+    zone.appendChild(b);
+    setTimeout(()=>b.remove(), 1200);
+  });
+});
+
+/* ============ placeholder tile builder ============ */
+function makeTile(label, isVideo){
+  const div = document.createElement('div');
+  div.className = 'tile' + (isVideo ? ' video-tile' : '');
+  div.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+      ${isVideo ? '<path d="M8 5v14l11-7z"/>' : '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-4 4-3-3-6 6"/>'}
+    </svg>
+    <span>${label}</span>`;
+  return div;
+}
+
+/* ---- Behind the lens: 10-photo carousel, arrows + native swipe ---- */
+const lensPhotos = [
+  'images/fruits.jpg', 'images/birds.jpg', 'images/mountain.jpg',
+  'images/paris.jpg', 'images/train.jpg', 'images/place.jpg',
+  'images/waterfall.jpg', 'images/flower.jpg', 'images/horse.jpg',
+  'images/arc.jpg'
+];
+lensPhotos.forEach(src=>{
+  const img = document.createElement('img');
+  img.src = src;
+  img.className = 'tile';
+  img.style.objectFit = 'cover';
+  lensTrack.appendChild(img);
+});
+function scrollLens(dir){
+  const tile = lensTrack.querySelector('.tile');
+  if(!tile) return;
+  const style = getComputedStyle(lensTrack);
+  const gap = parseFloat(style.columnGap || style.gap || 14);
+  const amount = (tile.getBoundingClientRect().width + gap);
+  lensTrack.scrollBy({left: dir*amount, behavior:'smooth'});
+}
+document.getElementById('lensPrev').addEventListener('click', ()=>scrollLens(-1));
+document.getElementById('lensNext').addEventListener('click', ()=>scrollLens(1));
+
+const mktGallery = document.getElementById('marketingMediaGallery');
+const mktMedia = [
+  {src:'images/gdg.png', video:false},
+  {src:'videos/Devfest.mp4', video:true},
+  {src:'images/group.jpg', video:false},
+  {src:'videos/tech.mp4', video:true},
+  {src:'images/hackusf.jpg', video:false},
+  {src:'videos/tech2.mp4', video:true}
+];
+
+mktMedia.forEach(m => {
+  const tileWrapper = document.createElement('div');
+  tileWrapper.className = 'tile' + (m.video ? ' video-tile' : '');
+
+  const el = document.createElement(m.video ? 'video' : 'img');
+  el.src = m.src;
+  
+  el.style.position = 'absolute';
+  el.style.top = '0';
+  el.style.left = '0';
+  el.style.width = '100%';
+  el.style.height = '100%';
+  el.style.objectFit = 'cover';
+
+  if (m.video) {
+    el.muted = true;
+    el.loop = true;
+    el.playsInline = true;
+    el.autoplay = true;
+    el.setAttribute('muted', '');
+    el.setAttribute('playsinline', '');
+    
+    // --- NEW DEBUGGING MESSAGES ---
+    console.log(`[Video Init] Attempting to load: ${m.src}`);
+
+    el.addEventListener('loadeddata', () => {
+      console.log(`✅ [Video Success] ${m.src} has loaded its first frame.`);
+    });
+
+    el.addEventListener('error', (e) => {
+      const error = el.error;
+      console.error(`❌ [Video Error] Failed to load ${m.src}.`);
+      if (error) {
+        console.error(`   Error Code: ${error.code}`);
+        console.error(`   Error Message: ${error.message}`);
+      }
+    });
+
+    el.addEventListener('suspend', () => {
+      console.warn(`⚠️ [Video Suspended] Browser stopped downloading ${m.src} (Common with local file:// paths)`);
+    });
+  }
+
+  tileWrapper.appendChild(el);
+  mktGallery.appendChild(tileWrapper);
+
+  if (m.video) {
+    setTimeout(() => {
+      const playPromise = el.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => console.log(`▶️ [Video Playing] ${m.src} is successfully playing.`))
+          .catch(err => console.error(`⏸️ [Autoplay Blocked] ${m.src} couldn't play:`, err));
+      }
+    }, 50);
+  }
+});
+
+/* ============ dev projects ============ */
+const devProjectsData = [
+  {
+    title:'AI-Powered SOP Redundancy Detection Agent',
+    tags:['Python', 'Streamlit', 'OpenAI API'],
+    summary:'To standardize and streamline compliance review process.', 
+    desc:'Maintaining GMP compliance involves hundreds of SOPs that often develop semantic redundancies as different sites mandate the same policies in varying text. Manual management is slow and risks compliance drift, so this solution streamlines review and enables SOP standardization.',
+    video:'videos/SOPVid.mp4',
+    github:'https://github.com/Sanjana0712Singh/GMP_SOP_Comparator.git'
+  },
+  {
+    title:'Video to Training Document Pipeline',
+    tags:['Python','OpenCV', 'python-docx', 'OpenAI'],
+    summary:'One line on what it does.',
+    desc:'Developed a multi-stage AI pipeline that transforms MP4 screen recordings into formatted Word training documents. The system uses six sequential GPT-4o stages, each passing structured JSON to the next, and is deployed as a Streamlit web app with live progress tracking and one-click download.',
+    video:'videos/TrainingVID.mp4',
+    github:'https://github.com/Sanjana0712Singh/Video-To-Training-Document.git'
+  },
+  {
+    title:'Mixed Media Modeling',
+    tags:['SQL, Tableau, DuckDB'],
+    summary:'One line on what it does.',
+    desc:'Developed an interactive Tableau Media Mix Model (MMM) dashboard to evaluate channel efficiency across $11M+ in ad spend; identified key marginal ROAS insights (e.g., TikTok at 6.33x) to guide budget reallocation strategies.',
+    video:'videos/mmm.mp4',
+    github:'https://public.tableau.com/views/TableauMediaMixModelMMMdashboard/Dashboard1?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link'
+  }
+];
+
+const devGrid = document.getElementById('devProjects');
+devProjectsData.forEach(p=>{
+  const card = document.createElement('div');
+  card.className = 'project-card';
+  card.innerHTML = `
+    <div class="video-wrap">
+      <video muted loop playsinline preload="metadata" src="${p.video}"></video>
+      <div class="video-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 5v14l11-7z"/></svg>
+        <small>add ${p.video}</small>
+      </div>
+    </div>
+    <div class="project-body">
+      <h4>${p.title}</h4>
+      <p class="summary">${p.summary}</p>
+      <div class="project-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>`;
+  const video = card.querySelector('video');
+  const placeholder = card.querySelector('.video-placeholder');
+  video.addEventListener('loadeddata', ()=>{ placeholder.style.display = 'none'; });
+  video.addEventListener('error', ()=>{
+    placeholder.style.display = 'flex';
+    const label = placeholder.querySelector('small');
+    if(label) label.textContent = `couldn't load ${p.video} — check the filename/path`;
+  });
+  card.addEventListener('mouseenter', ()=>{ video.play().catch(()=>{}); });
+  card.addEventListener('mouseleave', ()=>{ video.pause(); video.currentTime = 0; });
+  card.addEventListener('click', ()=> openModal(p));
+  devGrid.appendChild(card);
+});
+
+/* ============ modal ============ */
+const overlay = document.getElementById('modalOverlay');
+const modalVideo = document.getElementById('modalVideo');
+const modalTitle = document.getElementById('modalTitle');
+const modalDesc = document.getElementById('modalDesc');
+const modalGithub = document.getElementById('modalGithub');
+const modalPlaceholder = document.getElementById('modalPlaceholder');
+const modalPlaceholderLabel = modalPlaceholder.querySelector('small');
+
+modalVideo.addEventListener('loadeddata', ()=>{ modalPlaceholder.style.display = 'none'; });
+modalVideo.addEventListener('error', ()=>{
+  modalPlaceholder.style.display = 'flex';
+  if(modalPlaceholderLabel) modalPlaceholderLabel.textContent = "couldn't load this video — check the filename/path";
+});
+
+function openModal(p){
+  modalTitle.textContent = p.title;
+  modalDesc.textContent = p.desc;
+  modalGithub.href = p.github;
+  
+  // Dynamically change the button text based on the URL
+  if (p.github.includes("tableau.com")) {
+    modalGithub.textContent = "↗ view on tableau";
+  } else {
+    modalGithub.textContent = "↗ view on GitHub";
+  }
+
+  modalPlaceholder.style.display = 'flex';
+  if(modalPlaceholderLabel) modalPlaceholderLabel.textContent = 'add your demo video src';
+  modalVideo.src = p.video;
+  overlay.classList.add('open');
+  modalVideo.play().catch(()=>{});
+}
+
+function closeModal(){
+  overlay.classList.remove('open');
+  modalVideo.pause();
+}
+document.getElementById('modalClose').addEventListener('click', closeModal);
+overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(); });
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+
+/* ============ marketing card stack ============ */
+const marketingData = [
+  
+  {title:'HackUSF 2026 GDG', tag:'brand campaign', img:'images/2.png'},
+  {title:'HackUSF 2026 GDG', tag:'social design', img:'images/3.png'},
+  {title:'HackUSF 2026 GDG', tag:'product launch', img:'images/4.png'},
+  {title:'HackUSF 2026 GDG', tag:'event branding', img:'images/5.png'},
+  {title:'HackUSF 2026 GDG', tag:'product launch', img:'images/6.jpg'},
+  {title:'HackUSF 2026 GDG', tag:'product launch', img:'images/7.jpg'},
+  {title:'HackUSF 2026 GDG', tag:'product launch', img:'images/8.jpg'},
+  {title:'HackUSF 2026 GDG', tag:'product launch', img:'images/9.jpg'},
+  {title:'Girls Who Code @ USF', tag:'Workshop post', img:'images/gwc1.png'},
+  {title:'Girls Who Code @ USF', tag:'E-board post', img:'images/gwc2.jpg'}
+];
+
+const stackEl = document.getElementById('cardStack');
+let order = marketingData.map((_,i)=>i);
+
+function renderStack(){
+  stackEl.innerHTML = '';
+  order.forEach((dataIdx, pos)=>{
+    const item = marketingData[dataIdx];
+    const card = document.createElement('div');
+    card.className = 'stack-card';
+    const spread = [
+      {r:-6, x:0, y:0},
+      {r:4, x:6, y:6},
+      {r:-3, x:-6, y:10},
+      {r:7, x:10, y:14}
+    ][Math.min(pos,3)];
+    card.style.transform = `translate(${spread.x}px, ${spread.y}px) rotate(${spread.r}deg)`;
+    card.style.zIndex = 10 - pos;
+    card.style.opacity = pos < 4 ? 1 : 0;
+    card.innerHTML = `
+      <div class="thumb"><img src="${item.img}" style="width:100%;height:100%;object-fit:cover;"></div>
+      <div class="cap"><b>${item.title}</b><div>${item.tag}</div></div>`;
+    if(pos === 0){
+      card.addEventListener('click', shuffleStack);
+    }
+    stackEl.appendChild(card);
+  });
+}
+
+function shuffleStack(){
+  const front = stackEl.firstElementChild;
+  front.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1), opacity .5s ease';
+  front.style.transform += ' translateX(260px) rotate(20deg)';
+  front.style.opacity = 0;
+  setTimeout(()=>{
+    order.push(order.shift());
+    renderStack();
+  }, 380);
+}
+renderStack();
+
+/* ============ ascii butterfly text art (hover a dot to lighten + pop it) ============ */
+const butterflyArt = document.getElementById('butterflyArt');
+const butterflyArtText = [
+  '⠀⠀                         ⢀⢔⣶⠀⠀',
+  '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡼⠗⡿⣾⠀⠀',
+  '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡼⠓⡞⢩⣯⡀⠀',
+  '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠰⡹⠁⢰⠃⣩⣿⡇⠀',
+  '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢷⣿⠿⣉⣩⠛⠲⢶⡠⢄⠐⣣⠃⣰⠗⠋⢀⣯⠁⠀',
+  '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⣯⣠⠬⠦⢤⣀⠈⠓⢽⣾⢔⣡⡴⠞⠻⠙⢳⡄',
+  '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣵⣳⠖⠉⠉⢉⣩⣵⣿⣿⣒⢤⣴⠤⠽⣬⡇',
+  '⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢻⣟⠟⠋⢡⡎⢿⢿⠳⡕⢤⡉⡷⡽⠁',
+  '⣧⢮⢭⠛⢲⣦⣀⠀⠀⠀⠠⡀⠀⠀⠀⡾⣥⣏⣖⡟⠸⢺⠀⠀⠈⠙⠋⠁⠀⠀',
+  '⠈⠻⣶⡛⠲⣄⠀⠙⠢⣀⠀⢇⠀⠀⠀⠘⠿⣯⣮⢦⠶⠃⠀⠀⠀⠀⠀⠀⠀⠀',
+  '⠀⠀⢻⣿⣥⡬⠽⠶⠤⣌⣣⣼⡔⠊⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀',
+  '⠀⠀⢠⣿⣧⣤⡴⢤⡴⣶⣿⣟⢯⡙⠒⠤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀',
+  '⠀⠀⠘⣗⣞⣢⡟⢋⢜⣿⠛⡿⡄⢻⡮⣄⠈⠳⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀',
+  '⠀⠀⠀⠈⠻⠮⠴⠵⢋⣇⡇⣷⢳⡀⢱⡈⢋⠛⣄⣹⣲⡀⠀⠀⠀⠀⠀⠀⠀⠀',
+  '⠀⠀⠀⠀⠀⠀⠀⠈⢿⣱⡇⣦⢾⣾⠿⠟⠿⠷⠷⣻⠧⠀⠀⠀⠀⠀⠀⠀⠀⠀',
+  '⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⠽⠞⠊⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀'
+];
+
+butterflyArt.innerHTML = butterflyArtText.map(line =>
+  `<div>${[...line].map(char =>
+    `<span class="butterfly-dot${char === ' ' ? ' empty' : ''}">${char === ' ' ? '&nbsp;' : char}</span>`
+  ).join('')}</div>`
+).join('');
+butterflyArt.querySelectorAll('.butterfly-dot').forEach(dot=>{
+  dot.addEventListener('mouseenter', ()=>dot.classList.add('hovered'));
+  dot.addEventListener('mouseleave', ()=>dot.classList.remove('hovered'));
+});
+
+/* ============ drawing pad ============ */
+const canvas = document.getElementById('drawPad');
+const ctx = canvas.getContext('2d');
+ctx.fillStyle = '#fff';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+let drawing = false;
+let currentColor = '#FF4F93';
+
+const colors = ['#FF4F93','#1F8A54','#12241B','#FFFFFF'];
+const swatchWrap = document.getElementById('swatches');
+colors.forEach((c,i)=>{
+  const sw = document.createElement('div');
+  sw.className = 'swatch' + (i===0 ? ' active' : '');
+  sw.style.background = c;
+  if(c === '#FFFFFF') sw.style.border = '2px solid #ccc';
+  sw.addEventListener('click', ()=>{
+    currentColor = c;
+    document.querySelectorAll('.swatch').forEach(s=>s.classList.remove('active'));
+    sw.classList.add('active');
+  });
+  swatchWrap.appendChild(sw);
+});
+
+function getPos(e){
+  const rect = canvas.getBoundingClientRect();
+  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: clientX - rect.left, y: clientY - rect.top };
+}
+function startDraw(e){ drawing = true; draw(e); }
+function stopDraw(){ drawing = false; ctx.beginPath(); }
+function draw(e){
+  if(!drawing) return;
+  e.preventDefault();
+  const {x,y} = getPos(e);
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = currentColor;
+  ctx.lineTo(x,y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x,y);
+}
+canvas.addEventListener('mousedown', startDraw);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDraw);
+canvas.addEventListener('mouseleave', stopDraw);
+canvas.addEventListener('touchstart', startDraw);
+canvas.addEventListener('touchmove', draw);
+canvas.addEventListener('touchend', stopDraw);
+
+document.getElementById('clearPad').addEventListener('click', ()=>{
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+});
+
+/* ============ sticker board ============
+   Uses window.storage (shared across every visitor) when it's available —
+   that only exists while this page is viewed inside Claude's live preview.
+   Everywhere else (Live Server, a real host, opening the file directly),
+   it automatically falls back to this browser's localStorage so the
+   button always works — that board just won't be shared between visitors. */
+const corkboard = document.getElementById('corkboard');
+const STICKER_PREFIX = 'sticker:';
+const STICKER_SIZE = 76;
+const STICKER_PAD = 8;
+const MAX_STICKERS = 22;
+const LOCAL_KEY = 'portfolio_stickers_v1';
+
+const hasSharedStorage = typeof window.storage !== 'undefined'
+  && window.storage
+  && typeof window.storage.set === 'function';
+
+function getLocalStickers(){
+  try{
+    const raw = localStorage.getItem(LOCAL_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(err){
+    console.error('Could not read local stickers', err);
+    return [];
+  }
+}
+function saveLocalStickers(list){
+  try{ localStorage.setItem(LOCAL_KEY, JSON.stringify(list)); }
+  catch(err){ console.error('Could not save local stickers', err); }
+}
+
+async function getStickers(){
+  if(hasSharedStorage){
+    try{
+      const list = await window.storage.list(STICKER_PREFIX, true);
+      const keys = (list && list.keys) || [];
+      const stickers = [];
+      for(const key of keys){
+        try{
+          const res = await window.storage.get(key, true);
+          if(res) stickers.push(JSON.parse(res.value));
+        }catch(err){ /* skip unreadable entries */ }
+      }
+      stickers.sort((a,b)=> a.createdAt - b.createdAt);
+      return stickers;
+    }catch(err){
+      console.error('Shared storage read failed, using this browser only instead.', err);
+    }
+  }
+  return getLocalStickers().sort((a,b)=> a.createdAt - b.createdAt);
+}
+
+async function deleteSticker(key){
+  if(hasSharedStorage){
+    try{ await window.storage.delete(key, true); return; }
+    catch(err){ console.error('Shared delete failed, using this browser only instead.', err); }
+  }
+  saveLocalStickers(getLocalStickers().filter(s=>s.key !== key));
+}
+
+async function addSticker(newSticker){
+  if(hasSharedStorage){
+    try{
+      const result = await window.storage.set(newSticker.key, JSON.stringify(newSticker), true);
+      if(result) return true;
+    }catch(err){
+      console.error('Shared save failed, using this browser only instead.', err);
+    }
+  }
+  const list = getLocalStickers();
+  list.push(newSticker);
+  saveLocalStickers(list);
+  return true;
+}
+
+async function renderBoard(){
+  const stickers = await getStickers();
+  corkboard.querySelectorAll('.sticker').forEach(s=>s.remove());
+  const emptyMsg = corkboard.querySelector('.empty-msg');
+  if(stickers.length === 0){
+    if(emptyMsg) emptyMsg.style.display = 'flex';
+    return;
+  }
+  if(emptyMsg) emptyMsg.style.display = 'none';
+  stickers.forEach(renderSticker);
+}
+
+function renderSticker(s){
+  const el = document.createElement('div');
+  el.className = 'sticker';
+  el.style.left = s.xPct + '%';
+  el.style.top = s.yPct + '%';
+  el.style.transform = `rotate(${s.rot}deg)`;
+  el.innerHTML = `<img src="${s.dataUrl}" alt="visitor sticker"><button class="rm" title="remove sticker">×</button>`;
+  el.querySelector('.rm').addEventListener('click', async (e)=>{
+    e.stopPropagation();
+    await deleteSticker(s.key);
+    renderBoard();
+  });
+  corkboard.appendChild(el);
+}
+
+function findFreeSpot(existing, boardW, boardH){
+  for(let attempt=0; attempt<50; attempt++){
+    const x = STICKER_PAD + Math.random()*Math.max(1, boardW - STICKER_SIZE - STICKER_PAD*2);
+    const y = STICKER_PAD + Math.random()*Math.max(1, boardH - STICKER_SIZE - STICKER_PAD*2);
+    const overlaps = existing.some(s=>{
+      const ex = (s.xPct/100) * boardW;
+      const ey = (s.yPct/100) * boardH;
+      return Math.abs(ex - x) < (STICKER_SIZE + STICKER_PAD) && Math.abs(ey - y) < (STICKER_SIZE + STICKER_PAD);
+    });
+    if(!overlaps) return {x, y};
+  }
+  return null;
+}
+
+document.getElementById('stickBtn').addEventListener('click', async ()=>{
+  const rect = corkboard.getBoundingClientRect();
+  const boardW = rect.width || 600;
+  const boardH = Math.max(rect.height, 260);
+
+  let stickers = await getStickers();
+  let spot = findFreeSpot(stickers, boardW, boardH);
+
+  if(!spot && stickers.length > 0){
+    const oldest = stickers[0];
+    await deleteSticker(oldest.key);
+    stickers = stickers.slice(1);
+    spot = findFreeSpot(stickers, boardW, boardH) || { x: boardW/2 - STICKER_SIZE/2, y: boardH/2 - STICKER_SIZE/2 };
+  } else if(!spot){
+    spot = { x: boardW/2 - STICKER_SIZE/2, y: boardH/2 - STICKER_SIZE/2 };
+  }
+
+  if(stickers.length >= MAX_STICKERS){
+    const oldest = stickers[0];
+    await deleteSticker(oldest.key);
+  }
+
+  const key = STICKER_PREFIX + Date.now() + '-' + Math.floor(Math.random()*1000);
+  const newSticker = {
+    key,
+    dataUrl: canvas.toDataURL('image/png'),
+    xPct: (spot.x / boardW) * 100,
+    yPct: (spot.y / boardH) * 100,
+    rot: -15 + Math.random()*30,
+    createdAt: Date.now()
+  };
+
+  const ok = await addSticker(newSticker);
+  if(!ok){ console.error('Sticker failed to save'); return; }
+  renderBoard();
+  ctx.fillStyle = '#fff';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+});
+
+renderBoard();
+</script>
+</body>
+</html>
